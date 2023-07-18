@@ -61,15 +61,16 @@ function setup() {
 
 function draw() {
   for (var i = 0; i <= mouseX; i++) {
+    // 매 순간 카운트가 된다. 
     counter++;
 
-    // random number for the direction of the next step
+    //Mode가 2일 때는 오른쪽 대각선만 출력
     if (drawMode == 2) {
       direction = int(random(3));
     } else {
       direction = int(random(7));
     }
-
+    // 랜덤 방향에 따라 이동
     if (direction == NORTH) {
       posY -= stepSize;
     } else if (direction == NORTHEAST) {
@@ -96,7 +97,9 @@ function draw() {
     if (posX < 0) posX = width;
     if (posY < 0) posY = height;
     if (posY > height) posY = 0;
-
+    
+    // 100번정도 이동하면 count 0으로 초기화
+    // Mode3일 때 100번에 한번씩 큰 원이 그려진다
     if (drawMode == 3) {
       if (counter >= 100) {
         counter = 0;
@@ -104,12 +107,13 @@ function draw() {
         ellipse(posX + stepSize / 2, posY + stepSize / 2, diameter + 7, diameter + 7);
       }
     }
-
+    // 이동하는 원을 자연스럽게 하기 위해서 투명한 원 생성
     fill(0, 40);
     ellipse(posX + stepSize / 2, posY + stepSize / 2, diameter, diameter);
   }
 }
 
+// Mode 3일 때 이동하는 사이즈와 원의 크기가 커진다
 function keyReleased() {
   if (key == 's' || key == 'S') saveCanvas(gd.timestamp(), 'png');
   if (keyCode == DELETE || keyCode == BACKSPACE) clear();
