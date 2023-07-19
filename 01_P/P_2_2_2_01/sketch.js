@@ -29,6 +29,7 @@
  */
 'use strict';
 
+// 4방위만 표현
 var NORTH = 0;
 var EAST = 1;
 var SOUTH = 2;
@@ -36,9 +37,9 @@ var WEST = 3;
 var direction = SOUTH;
 
 var stepSize = 3;
-var minLength = 10;
+var minLength = 10; //최소 이동 거리
 var diameter = 1;
-var angleCount = 7;
+var angleCount = 7;  // 각도 거리
 var angle;
 var reachedBorder = false;
 
@@ -74,7 +75,7 @@ function draw() {
 
     // ------ check if agent is near one of the display borders ------
     reachedBorder = false;
-
+    // 경계에 5pixel 근처로 오면 반대 방향으로 바꾸기
     if (posY <= 5) {
       direction = SOUTH;
       reachedBorder = true;
@@ -93,18 +94,19 @@ function draw() {
     loadPixels();
     var currentPixel = get(floor(posX), floor(posY));
     if (
+      // reach
       reachedBorder ||
       (currentPixel[0] != 255 && currentPixel[1] != 255 && currentPixel[2] != 255)
     ) {
       angle = getRandomAngle(direction);
-
+      // 방향이 바뀐 후 라인은 마지막 위치까지 라인을 그리기
       var distance = dist(posX, posY, posXcross, posYcross);
       if (distance >= minLength) {
         strokeWeight(3);
         stroke(0, 0, 0);
         line(posX, posY, posXcross, posYcross);
       }
-
+      // 현재 위치 저장
       posXcross = posX;
       posYcross = posY;
     }
@@ -115,12 +117,16 @@ function keyReleased() {
   if (key == 's' || key == 'S') saveCanvas(gd.timestamp(), 'png');
   if (keyCode == DELETE || keyCode == BACKSPACE) background(360);
 }
-
+// 지금 방향에 대해서 다음 angle을 진행하는 함수
 function getRandomAngle(currentDirection) {
   var a = (floor(random(-angleCount, angleCount)) + 0.5) * 90 / angleCount;
+  //현재 방향이 북쪽이면, 좀 더 반시계방향 
   if (currentDirection == NORTH) return a - 90;
+  //현재 방향이 동쪽이면, 랜덤으로
   if (currentDirection == EAST) return a;
+  // 현재 방향이 남쪽이면 좀 더 시계방향으로 
   if (currentDirection == SOUTH) return a + 90;
+  // 현재 방향이 서쪽이면 좀 더 반대 방향으로 
   if (currentDirection == WEST) return a + 180;
   return 0;
 }
