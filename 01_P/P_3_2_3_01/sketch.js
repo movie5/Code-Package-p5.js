@@ -1,4 +1,4 @@
-// P_3_2_3_01
+ // P_3_2_3_01
 //
 // Generative Gestaltung – Creative Coding im Web
 // ISBN: 978-3-87439-902-9, First Edition, Hermann Schmidt, Mainz, 2018
@@ -70,14 +70,14 @@ function draw() {
   noFill();
   push();
 
-  // translation according the actual writing position
+  // 마우스 위치에서 글씨를 생성하기 위해 이동 https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/translate
   translate(letterX, letterY);
 
-  // distortion on/off
+  // 마우스 버튼이 눌려지고, 마우스 x 좌표에 따라서 얼마나 distortion이 일어날지 정함
   danceFactor = 1;
   if (mouseIsPressed && mouseButton == LEFT) danceFactor = map(mouseX, 0, width, 0, 3);
 
-  // are there points to draw?
+  // 그릴 수 있는 점들이 있으면 그리기
   if (pnts.length > 0) {
     // let the points dance
     for (var i = 0; i < pnts.length; i++) {
@@ -85,7 +85,7 @@ function draw() {
       pnts[i].y += random(-stepSize, stepSize) * danceFactor;
     }
 
-    //  ------ lines: connected straight  ------
+    //  ------ lines: 직선 그리기  ------
     strokeWeight(0.1);
     stroke(0);
     beginShape();
@@ -96,7 +96,7 @@ function draw() {
     vertex(pnts[0].x, pnts[0].y);
     endShape();
 
-    //  ------ lines: connected rounded  ------
+    //  ------ lines: 곡선 그리기, 안씀  ------
     /*
       strokeWeight(0.08);
 
@@ -122,7 +122,7 @@ function getPoints() {
   var path = new g.Path(fontPath.commands);
   path = g.resampleByLength(path, 25);
   textW = path.bounds().width;
-  // remove all commands without a coordinate
+  // 축 없이 모든 명령 삭제
   for (var i = path.commands.length - 1; i >= 0 ; i--) {
     if (path.commands[i].x == undefined) {
       path.commands.splice(i, 1);
@@ -132,11 +132,12 @@ function getPoints() {
 }
 
 function keyReleased() {
-  // export png
+  // 컨트롤 키를 누르면 png 파일로 저장
   if (keyCode == CONTROL) saveCanvas(gd.timestamp(), 'png');
   if (keyCode == ALT) {
-    // switch loop on/off
-    freeze = !freeze;
+    // 알트키를 누르면 loop를 시작하거나 멈추기
+    // 일단 현재 상태를 바꿔서 아래 if-else문에서 바뀐 상태 적용
+    freeze = !freeze; 
     if (freeze) {
       noLoop();
     } else {
@@ -168,12 +169,15 @@ function keyPressed() {
 }
 
 function keyTyped() {
+  // 문자 입력
   if (keyCode >= 32) {
+    // 스페이스바
     if (keyCode == 32) {
       typedKey = '';
       letterX += textW + spaceWidth;
       pnts = getPoints(typedKey);
     } else {
+      // 삭제, 엔터, 쉬프트 등등
       typedKey = key;
       letterX += textW + spacing;
       pnts = getPoints(typedKey);
