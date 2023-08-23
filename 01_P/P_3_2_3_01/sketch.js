@@ -17,6 +17,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Font outline from agents
+개별적인 노드의 포인트들과 선이 움직이면서 글자를 글자로 알아보지 못하게 되고, 새로운 이미지가 생성된다. 
+
+
 /**
  * fontgenerator with dynamic elements. letter ouline consist of linked agents.
  *
@@ -74,6 +78,7 @@ function draw() {
   translate(letterX, letterY);
 
   // 마우스 버튼이 눌려지고, 마우스 x 좌표에 따라서 얼마나 distortion이 일어날지 정함
+  // Dancefactor:  마우스 x좌표와 비례해서 값이 변하는, 변화 속도에 대한 변수
   danceFactor = 1;
   if (mouseIsPressed && mouseButton == LEFT) danceFactor = map(mouseX, 0, width, 0, 3);
 
@@ -90,6 +95,7 @@ function draw() {
     stroke(0);
     beginShape();
     for (var i = 0; i < pnts.length; i++) {
+      // line connector
       vertex(pnts[i].x, pnts[i].y);
       ellipse(pnts[i].x, pnts[i].y, 7, 7);
     }
