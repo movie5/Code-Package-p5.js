@@ -89,7 +89,7 @@ function createLetters() {
       var charsBefore = textTyped.substring(0, i); //글자의 x 좌표를 대해 정하기 위해 substring사용해서 지금까지 단어들의 substring을 제거
       x = font.textBounds(charsBefore, 0, 0, fontSize).w; // textBounds로 글자의 width를 정한다. 
     }
-    var newLetter = new Letter(chars[i], x, 0);
+    var newLetter = new Letter(chars[i], x, 0); // 새로운 letter 클래스를 생성한다. 
     letters.push(newLetter);
   }
 }
@@ -99,24 +99,24 @@ function Letter(char, x, y) {
   this.x = x;
   this.y = y;
 
-  Letter.prototype.draw = function() {
-    var path = font.textToPoints(this.char, this.x, this.y, fontSize, {sampleFactor: pathSampleFactor});
+  Letter.prototype.draw = function() { // draw 함수를 불러와서 폰트 아웃라인이 안과 밖으로 이동한다 
+    var path = font.textToPoints(this.char, this.x, this.y, fontSize, {sampleFactor: pathSampleFactor}); //char을 포인트 행렬로 바꾼다
     stroke(shapeColor);
 
-    for (var d = 0; d < ribbonWidth; d += density) {
+    for (var d = 0; d < ribbonWidth; d += density) { //밀도 값에 따라서 생성되는 선의 개수가 달라진
       beginShape();
 
       for (var i = 0; i < path.length; i++) {
         var pos = path[i];
         var nextPos = path[i + 1];
 
-        if (nextPos) {
-          var p0 = createVector(pos.x, pos.y);
+        if (nextPos) { // nextPos가 빈 값이 아니면(아직 끝까지 도달한게 아니라면)
+          var p0 = createVector(pos.x, pos.y); // 두개의 포인트는 vector로 변환된다.
           var p1 = createVector(nextPos.x, nextPos.y);
-          var v = p5.Vector.sub(p1, p0);
-          v.normalize();
-          v.rotate(HALF_PI);
-          v.mult(d);
+          var v = p5.Vector.sub(p1, p0); //빼기 연
+          v.normalize(); // 0과 1사이의 숫자로 정규화
+          v.rotate(HALF_PI); //90도만큼 회전
+          v.mult(d); // 밀도만큼 개수 증가
           var pneu = p5.Vector.add(p0, v);
           curveVertex(pneu.x, pneu.y);
         }
