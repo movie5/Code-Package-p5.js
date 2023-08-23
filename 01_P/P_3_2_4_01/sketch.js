@@ -37,6 +37,10 @@
  */
 'use strict';
 
+// Parallel font outlines
+// moire effecr : overlapping grid structures
+// 90도씩 이동해서 정확한 길이를 가질 수 있도록 이동한다. 
+
 var letters = [];
 var density = 2.5;
 var ribbonWidth = 92;
@@ -77,13 +81,13 @@ function draw() {
 
 function createLetters() {
   letters = [];
-  var chars = textTyped.split('');
+  var chars = textTyped.split(''); //한 글자에 대한 행렬 생성
 
   var x = 0;
   for (var i = 0; i < chars.length; i++) {
     if (i > 0) {
-      var charsBefore = textTyped.substring(0, i);
-      x = font.textBounds(charsBefore, 0, 0, fontSize).w;
+      var charsBefore = textTyped.substring(0, i); //글자의 x 좌표를 대해 정하기 위해 substring사용해서 지금까지 단어들의 substring을 제거
+      x = font.textBounds(charsBefore, 0, 0, fontSize).w; // textBounds로 글자의 width를 정한다. 
     }
     var newLetter = new Letter(chars[i], x, 0);
     letters.push(newLetter);
